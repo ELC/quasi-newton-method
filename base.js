@@ -200,10 +200,11 @@ function hessian_matrix(fun, evaluate_point) {
     );
 }
 
-function test_function(fun, guess_x, guess_y, iterations) {
+function test_function(fun, guess_x, guess_y, alpha, iterations) {
     document.querySelector("#function").value = fun;
     document.querySelector("#guess_x").value = guess_x;
     document.querySelector("#guess_y").value = guess_y;
+    document.querySelector("#alpha").value = alpha;
     document.querySelector("#iterations").selectedIndex = iterations - 1;
     plot();
 }

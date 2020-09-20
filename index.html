@@ -58,7 +58,7 @@
 
 <body>
     <header class="title window">
-        <h1>Interactive Broyden–Fletcher–Goldfarb–Shanno (BFGS)</h1>
+        <h1>Broyden–Fletcher–Goldfarb–Shanno (BFGS)</h1>
 
         <section class="plotSettings">
             <div class="settingConf">
@@ -77,19 +77,19 @@
                     <span>Y<sub>0</sub>=</span>
                     <input class="guess-input" id="guess_y" type="float" value="-3" onkeypress="plot_event(event)">
                     <span>&#x3B1;=</span>
-                    <input class="guess-input" id="alpha" type="float" value="1" onkeypress="plot_event(event)">
+                    <input class="guess-input" id="alpha" type="float" value="2" onkeypress="plot_event(event)">
                 </span>
             </div>
             <div class="settingConf">
                 <label for="iterations">Iterations: </label>
                 <span class='field'>
                     <select class="iteration-input" id="iterations" name="iterations">
-                        <option value="1" selected>1</option>
+                        <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
-                        <option value="6">6</option>
+                        <option value="6" selected>6</option>
                         <option value="7">7</option>
                     </select>
                 </span>
@@ -108,17 +108,17 @@
         <section class="test window">
             <p class="test-header"> Try These Functions</p>
             <button class="function-option"
-                onclick="test_function('0.02 * ( (x^2 + y - 11)^2 + (x + y^2 - 7)^2)', 1, 1, 5);">Quartic<br><small>(Himmelblau)</small></button>
+                onclick="test_function('0.02 * ( (x^2 + y - 11)^2 + (x + y^2 - 7)^2)', 1, 1, 1, 3);">Quartic<br><small>(Himmelblau)</small></button>
             <button class="function-option"
-                onclick="test_function('2*(0.5 * x)^2 - 1.05 * (0.5 * x)^4 + (0.5 * x)^6 / 6 + (0.5 * x) * (0.75 * y) + (0.75 * y)^2', -0.8, -4, 3);">Local
+                onclick="test_function('2*(0.5 * x)^2 - 1.05 * (0.5 * x)^4 + (0.5 * x)^6 / 6 + (0.5 * x) * (0.75 * y) + (0.75 * y)^2', -0.8, -4, 1, 4);">Local
                 Minima<br><small>(Camel)</small></button>
-            <button class="function-option" onclick="test_function('(0.4 * x)^3 + (0.3 * y)^5', 5, 5, 7);">Saddle Point
+            <button class="function-option" onclick="test_function('(0.4 * x)^3 + (0.3 * y)^5', 5, 5, 0.8, 7);">Saddle Point
                 <br><small>(Powell Sum)</small></button>
             <button class="function-option"
-                onclick="test_function('0.01 * ((x^2 - 1)^2 + (y^2 - 2)^2)', 2, -3, 3);">Multi
+                onclick="test_function('0.01 * ((x^2 - 1)^2 + (y^2 - 2)^2)', 2, -3, 1.5, 5);">Multi
                 Modal<br><small>(Qing)</small></button>
             <button class="function-option"
-                onclick="test_function('0.0005 * (100 (y - (0.5 * x)^2)^2+ (1 - (0.5 * x))^2)', -1.2, 1, 4);">Local
+                onclick="test_function('0.0005 * (100 (y - (0.5 * x)^2)^2+ (1 - (0.5 * x))^2)', -1, 2, 3, 4);">Local
                 Minima<br><small>(Rosenbrock)</small></button>
             <a href="https://forms.gle/wJkGp2iGApzM19W69" target="_blank"><button
                     class="propose-option">Propose</button></a>
