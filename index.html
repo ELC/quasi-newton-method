@@ -41,7 +41,7 @@
     <meta name="twitter:url" content="https://elc.github.io/newton-method-multi-variable/">
     <meta name="twitter:image" content="https://elc.github.io/newton-method-multi-variable/media_image.png">
 
-    <script src="nerdamer.js"></script> <!-- assuming you've saved the file in the root of course -->
+    <script src="https://elc.github.io/interactive-optimization/nerdamer.js"></script>
     <!-- LOAD ADD-ONS -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
@@ -49,41 +49,85 @@
 
     <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href='style.css'>
+    <link rel="stylesheet" type="text/css" href='https://elc.github.io/interactive-optimization/style.css'>
 
-    <script src="base.js"></script>
+    <style>
+        .header{
+            display:flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header__title{
+            margin: 0 0 15px 0;
+        }
+
+        .content{
+            margin: 15px 0 10px 0;
+        }
+
+        .window{
+            padding: 12px;
+        }
+
+        .option--results{
+            padding: 5px 10px 10px 10px;
+        }
+
+        .option--plot{
+            padding-top: 0;
+        }
+    </style>
+
+    <script src="https://elc.github.io/interactive-optimization/basic.js"></script>
+
+    <script>
+        method = (fun, evaluate_point, iterations) => {
+            var alpha = document.querySelector("#alpha").value;
+            return BFGS(fun, evaluate_point, alpha, iterations);
+        }
+
+        function test_function(fun, guess_x, guess_y, alpha, iterations) {
+            document.querySelector("#function").value = fun;
+            document.querySelector("#guess_x").value = guess_x;
+            document.querySelector("#guess_y").value = guess_y;
+            document.querySelector("#alpha").value = alpha;
+            document.querySelector("#iterations").selectedIndex = iterations - 1;
+            plot();
+        }
+    </script>
 
 
 </head>
 
-<body>
-    <header class="title window">
-        <h1>Broyden–Fletcher–Goldfarb–Shanno (BFGS)</h1>
+<body class="frame--main">
+    <header class="header window">
+        <h1 class="header__title">Broyden–Fletcher–Goldfarb–Shanno (BFGS)</h1>
 
-        <section class="plotSettings">
-            <div class="settingConf">
-                <label for="function">Function f(x,y): </label>
-                <span class='field'>
-                    <span>f(x, y)=</span>
-                    <input class="function-input" id="function" type="text" value="0.1(3 * x^2 + 2 * x * y + 1.5 * y^2)"
+        <section class="header__settings">
+            <div class="header__settings__component">
+                <label for="function">Function f(x, y)</label>
+                <span class='header__settings__component__field'>
+                    <span class="header__settings__label">f(x, y)=</span>
+                    <input class="header__input--function" id="function" type="text" value="0.1(3 * x^2 + 2 * x * y + 1.5 * y^2)"
                         onkeypress="plot_event(event)">
                 </span>
             </div>
-            <div class="settingConf">
-                <label for="guess">Parameters: </label>
-                <span class='field'>
-                    <span>X<sub>0</sub>=</span>
-                    <input class="guess-input" id="guess_x" type="float" value="2" onkeypress="plot_event(event)">
-                    <span>Y<sub>0</sub>=</span>
-                    <input class="guess-input" id="guess_y" type="float" value="-3" onkeypress="plot_event(event)">
-                    <span>&#x3B1;=</span>
-                    <input class="guess-input" id="alpha" type="float" value="2" onkeypress="plot_event(event)">
+            <div class="header__settings__component">
+                <label for="guess">Parameters</label>
+                <span class='header__settings__component__field'>
+                    <span class="header__settings__label">X<sub>0</sub>=</span>
+                    <input class="header__input--point" id="guess_x" type="float" value="2" onkeypress="plot_event(event)">
+                    <span class="header__settings__label">Y<sub>0</sub>=</span>
+                    <input class="header__input--point" id="guess_y" type="float" value="-3" onkeypress="plot_event(event)">
+                    <span class="header__settings__label">&#x3B1;=</span>
+                    <input class="header__input--point" id="alpha" type="float" value="2" onkeypress="plot_event(event)">
                 </span>
             </div>
-            <div class="settingConf">
-                <label for="iterations">Iterations: </label>
-                <span class='field'>
-                    <select class="iteration-input" id="iterations" name="iterations">
+            <div class="header__settings__component">
+                <label for="iterations">Iterations</label>
+                <span class='header__settings__component__field'>
+                    <select class="header__input--iteration" id="iterations" name="iterations">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -94,34 +138,33 @@
                     </select>
                 </span>
             </div>
-            <button class="calculate-button" type="submit" onclick="plot();">Calculate!</button>
+            <button class="button button--calculate" type="submit" onclick="plot();">Calculate!</button>
         </section>
     </header>
     <div class="content">
-        <section class="results window">
+        <section class="option window option--results">
             <p id="results"></p>
         </section>
-        <section class="plot window">
+        <section class="option window option--plot">
             <div id="graph"></div>
-            <p id="exec-time"></p>
+            <p class="option--results__measurements" id="exec-time"></p>
         </section>
-        <section class="test window">
-            <p class="test-header"> Try These Functions</p>
-            <button class="function-option"
+        <section class="option window option--test">
+            <p class="option__title"> Try These Functions</p>
+            <button class="button button--function"
                 onclick="test_function('0.02 * ( (x^2 + y - 11)^2 + (x + y^2 - 7)^2)', 1, 1, 1, 3);">Quartic<br><small>(Himmelblau)</small></button>
-            <button class="function-option"
+            <button class="button button--function"
                 onclick="test_function('2*(0.5 * x)^2 - 1.05 * (0.5 * x)^4 + (0.5 * x)^6 / 6 + (0.5 * x) * (0.75 * y) + (0.75 * y)^2', -0.8, -4, 1, 4);">Local
                 Minima<br><small>(Camel)</small></button>
-            <button class="function-option" onclick="test_function('(0.4 * x)^3 + (0.3 * y)^5', 5, 5, 0.8, 7);">Saddle Point
+            <button class="button button--function" onclick="test_function('(0.4 * x)^3 + (0.3 * y)^5', 5, 5, 0.8, 7);">Saddle Point
                 <br><small>(Powell Sum)</small></button>
-            <button class="function-option"
+            <button class="button button--function"
                 onclick="test_function('0.01 * ((x^2 - 1)^2 + (y^2 - 2)^2)', 2, -3, 1.5, 5);">Multi
                 Modal<br><small>(Qing)</small></button>
-            <button class="function-option"
+            <button class="button button--function"
                 onclick="test_function('0.0005 * (100 (y - (0.5 * x)^2)^2+ (1 - (0.5 * x))^2)', -1, 2, 3, 4);">Local
                 Minima<br><small>(Rosenbrock)</small></button>
-            <a href="https://forms.gle/wJkGp2iGApzM19W69" target="_blank"><button
-                    class="propose-option">Propose</button></a>
+            <a href="https://forms.gle/wJkGp2iGApzM19W69" class="button button--propose button--function" target="_blank">Propose</a>
         </section>
     </div>
     <footer class="footer window">
